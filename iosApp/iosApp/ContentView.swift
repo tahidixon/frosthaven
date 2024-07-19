@@ -1,24 +1,21 @@
-//
-//  ContentView.swift
-//  iOSUnion
-//
-//  Created by Tahi Dixon on 7/5/24.
-//
-
+import UIKit
 import SwiftUI
+import FrosthavenHelper
+
+struct ComposeView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        MainViewControllerKt.MainViewController()
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+}
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        ComposeView()
+                .ignoresSafeArea(.keyboard) // Compose has own keyboard handler
     }
 }
 
-#Preview {
-    ContentView()
-}
+
+

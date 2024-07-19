@@ -137,7 +137,7 @@ class MainScreenModel() : ScreenModel {
             Logger.i { "Submit turnComplete" }
             val submitResponse = PostTurnCompleteTask().request()
             if (submitResponse?.status == HttpStatusCode.NoContent) {
-                activeActor == null // Let the game state sweep reset active player
+                activeActor.value = null // Let the game state sweep reset active player
             }
         }
     }

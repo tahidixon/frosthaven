@@ -264,8 +264,7 @@ class MainScreen : Screen {
                     modifier = Modifier.weight(2f, true).fillMaxHeight().align(Alignment.CenterVertically),
                     value = initiativeField?.toString() ?: "",
                     onValueChange = { content: String ->
-
-                        initiativeField = if (content.isNotEmpty()) content.toInt() else null
+                        initiativeField = if (content.isNotEmpty() && content.toIntOrNull() != null) content.toInt() else null
                     },
                     enabled = actorInfo.isInitiativeFieldEnabled,
                     label = {

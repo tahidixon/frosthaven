@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,9 +9,38 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinx.serialization)
+    kotlin("native.cocoapods") version "2.0.0"
 }
 
 kotlin {
+    cocoapods {
+        // Required properties
+        // Specify the required Pod version here. Otherwise, the Gradle project version is used.
+        version = "1.0"
+        summary = "ComposeApp"
+
+        // Optional properties
+        // Configure the Pod name here instead of changing the Gradle project name
+        name = "ComposeApp"
+
+        framework {
+            // Required properties
+            // Framework name configuration. Use this property instead of deprecated 'frameworkName'
+            baseName = "ComposeApp"
+
+            // Optional properties
+            // Specify the framework linking type. It's dynamic by default.
+            //isStatic = false
+            transitiveExport = false // This is default.
+            // Bitcode embedding
+            //embedBitcode(BITCODE)
+        }
+
+        // Maps custom Xcode configuration to NativeBuildType
+        xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = NativeBuildType.DEBUG
+        xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = NativeBuildType.RELEASE
+    }
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
@@ -88,6 +118,7 @@ kotlin {
 
             // Kermit
             implementation("co.touchlab:kermit:2.0.4")
+            implementation("co.touchlab:stately-common:2.0.4")
 
             // Icon pack
             implementation("br.com.devsrsouza.compose.icons:font-awesome:1.1.0")
@@ -95,6 +126,9 @@ kotlin {
             // Swipe Box
             // https://github.com/KevinnZou/compose-swipebox-multiplatform
             implementation("io.github.kevinnzou:compose-swipebox-multiplatform:1.2.0")
+        }
+        iosMain.dependencies {
+            implementation("io.ktor:ktor-client-darwin:$ktorVersion")
         }
     }
 }
