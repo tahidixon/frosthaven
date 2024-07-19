@@ -1,14 +1,19 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Frosthaven Helper
+***
+Frosthaven Helper is an application that helps manage game actors the user is 
+responsible for (e.g their current player character and/or any monsters currently 
+within play) within a session of the board game [Frosthaven](https://boardgamegeek.com/boardgame/295770/frosthaven). 
+It is a client side application that interacts with a server that is running its 
+companion app, [Frosthaven-Companion](https://github.com/bandrewss/frosthaven-companion).
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+This application is a Kotlin Multiplatform project designed to be built for both Android
+and iOS targets with minimal platform-specific code. The project is pulled together without
+much regard to architecture and development best practices, and requires housekeeping.
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
-
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+***
+### Roadmap
+1. Fix bugs
+2. Add error handling to actor creation
+3. Add support for turn-based reminders (resolving special scenario rules, updating elemental state, etc.)
+4. Add support for roles (Game state management, Element management, Monster management)
+5. Make some UX decisions
