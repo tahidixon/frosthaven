@@ -1,5 +1,4 @@
 # Frosthaven Helper
-***
 Frosthaven Helper is an application that helps manage game actors the user is 
 responsible for (e.g their current player character and/or any monsters currently 
 within play) within a session of the board game [Frosthaven](https://boardgamegeek.com/boardgame/295770/frosthaven). 
