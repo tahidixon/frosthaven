@@ -11,6 +11,7 @@ import core.models.actor.ActorInitiative
 import core.models.actor.ActorName
 import core.models.game.GameStates
 import core.models.game.isTurnIndicator
+import core.models.reminder.Reminder
 import core.models.rest.ErrorSeverity
 import core.models.rest.ErrorState
 import core.models.turn.TurnDetails
@@ -25,16 +26,16 @@ class MainScreenModel() : ScreenModel {
 
     companion object {
         const val SETTINGS_MODAL_ID = "Settings#MODAL_ID"
+        const val LIST_ACTORS = "Actors#LIST_ID"
+        const val LIST_REMINDERS = "Reminders#LIST_ID"
     }
     var activeModal = mutableStateOf(null as String?)
     var turnState = mutableStateOf(GameStates.PRE_GAME)
     var currentTurn = mutableStateOf(0)
     var actors = mutableStateListOf<Actor?>()
+    var reminders = mutableStateListOf<Reminder?>()
     var activeActor = mutableStateOf<Actor?>(null)
-    var nameInputLabel = mutableStateOf("Name")
-    var initiativeInputLabel = mutableStateOf("Initiative")
-    var turnLabel = mutableStateOf("Turn ${currentTurn.value}")
-    var turnWaitingLabel = "Waiting on other players"
+    var activePage = mutableStateOf<String>(LIST_ACTORS)
 
     fun start()
     {
@@ -53,7 +54,7 @@ class MainScreenModel() : ScreenModel {
                     {
                         currentTurn.value = bodyAsText.split("_").last().toInt()
                     }
-                    Logger.i { "Game state: $state"}
+                    Logger.i { "Game state: $state, bodyAsText: $bodyAsText, current turn: $currentTurn" }
                     state?.let { turnState.value = it}
                 }
 
@@ -67,8 +68,8 @@ class MainScreenModel() : ScreenModel {
         }
     }
 
-    fun createActor(actor: Actor?) {
-
+    fun createActor(actor: Actor?)
+    {
         Logger.i { "Create actor" }
         if (actor != null)
         {
@@ -76,24 +77,30 @@ class MainScreenModel() : ScreenModel {
                 Logger.i { "In launch" }
 
                 val createPlayerTaskResponse = CreatePlayerTask(actor).request()
-                if (createPlayerTaskResponse?.status == HttpStatusCode.OK) {
+                if (createPlayerTaskResponse?.status == HttpStatusCode.OK)
+                {
                     Logger.i { "Response ${createPlayerTaskResponse.bodyAsText()}" }
                     var createdActor: Actor = Json.decodeFromString(createPlayerTaskResponse.bodyAsText())
-                    turnLabel.value = "Actor name: ${createdActor.name}"
                     val existingActor = actors.find { it?.name == actor.name }
-                    if (existingActor != null) {
+                    if (existingActor != null)
+                    {
                         Logger.i { "Actor already exists. Updating..." }
                         actors[actors.indexOf(existingActor)] = createdActor
-                    } else {
+                    }
+                    else
+                    {
                         Logger.i { "Actor does not exist. Adding..." }
                         actors.add(createdActor)
                     }
                     actors.remove(null)
                     start()
-                } else if (createPlayerTaskResponse?.status == HttpStatusCode.NoContent) {
+                }
+                else if (createPlayerTaskResponse?.status == HttpStatusCode.NoContent)
+                {
                     Logger.i { "No response. Fetch actors and check"}
                     var actorListFetch = GetActorsTask().request()
-                    if (actorListFetch?.status == HttpStatusCode.OK) {
+                    if (actorListFetch?.status == HttpStatusCode.OK)
+                    {
                         var actorList: Array<Actor> = Json.decodeFromString(actorListFetch.bodyAsText())
                         Logger.i { "Actor list: ${actorList}"}
                     }
@@ -109,6 +116,12 @@ class MainScreenModel() : ScreenModel {
         }
     }
 
+    fun createReminder(reminder: Reminder)
+    {
+        reminders.add(reminder)
+        reminders.remove(null)
+    }
+
     fun removeActor(deletableActor: Actor?) {
         deletableActor?.let { actor ->
             screenModelScope.launch {
@@ -120,6 +133,10 @@ class MainScreenModel() : ScreenModel {
                 }
             }
         }
+    }
+
+    fun removeReminder(reminder: Reminder?) {
+        reminders.remove(reminder)
     }
 
     fun submitInitiative(initiative: ActorInitiative) {

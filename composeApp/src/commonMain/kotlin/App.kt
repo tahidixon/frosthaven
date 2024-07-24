@@ -1,7 +1,6 @@
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.Navigator
-import core.GlobalState
 import core.app.initKoin
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.screen.MainScreen
