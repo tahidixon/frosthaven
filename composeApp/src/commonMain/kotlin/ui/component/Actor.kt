@@ -20,18 +20,19 @@ import com.kevinnzou.swipebox.widget.SwipeIcon
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Ghost
+import compose.icons.fontawesomeicons.solid.Star
 import compose.icons.fontawesomeicons.solid.Trash
 import core.models.actor.Actor
 import core.models.actor.ActorInfo
 import core.models.actor.getActorState
 import core.models.game.GameStates
 import kotlinx.coroutines.launch
-import ui.model.MainScreenModel
+import ui.model.TurnTabModel
 import ui.screen.constants.Sizes
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Actor(screenModel: MainScreenModel, turnState: GameStates, actor: Actor? = null) {
+fun Actor(screenModel: TurnTabModel, turnState: GameStates, actor: Actor? = null) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var nameField by remember { mutableStateOf(actor?.name) }
     var initiativeField by remember { mutableStateOf(actor?.initiative) }
@@ -52,8 +53,25 @@ fun Actor(screenModel: MainScreenModel, turnState: GameStates, actor: Actor? = n
 
     val scope = rememberCoroutineScope()
 
-    SwipeBox(modifier = Modifier.fillMaxWidth(),
-        swipeDirection = SwipeDirection.EndToStart,
+    SwipeBox(
+        modifier = Modifier.fillMaxWidth(),
+        swipeDirection = if (actorInfo.isDeleteIconEnabled || actorInfo.isElementCreateEnabled) SwipeDirection.Both else SwipeDirection.EndToStart,
+        startContentWidth = if (actorInfo.isElementCreateEnabled) 50.dp else 0.dp,
+        startContent = if (!actorInfo.isElementCreateEnabled) null else { swipeableState, endSwipeProgress ->
+            SwipeIcon(
+                imageVector = FontAwesomeIcons.Solid.Star,
+                contentDescription = "Add Element",
+                tint = Color.White,
+                background = MaterialTheme.colorScheme.inversePrimary,
+                weight = 1f,
+                iconSize = 20.dp
+            ) {
+                scope.launch {
+                    swipeableState.animateTo(0)
+                    screenModel.activeModal.value = TurnTabModel.ELEMENT_CREATION_ID
+                }
+            }
+        },
         endContentWidth = if (actorInfo.isDeleteIconEnabled) 50.dp else 0.dp,
         endContent = if (!actorInfo.isDeleteIconEnabled) null else { swipeableState, endSwipeProgress ->
             SwipeIcon(
@@ -143,7 +161,7 @@ fun Actor(screenModel: MainScreenModel, turnState: GameStates, actor: Actor? = n
                     modifier = Modifier.size(25.dp),
                     imageVector = FontAwesomeIcons.Solid.Ghost,
                     contentDescription = "Monster",
-                    tint = if (monsterField) Color.Magenta else Color.Black
+                    tint = if (monsterField) Color.Magenta else MaterialTheme.colorScheme.primary
                 )
             }
 
@@ -159,7 +177,7 @@ fun Actor(screenModel: MainScreenModel, turnState: GameStates, actor: Actor? = n
                     modifier = Modifier.size(25.dp),
                     imageVector = actorInfo.icon,
                     contentDescription = "Add Actor",
-                    tint = if (actorInfo.isPrimaryIconEnabled) Color.Black else Color.LightGray
+                    tint = if (actorInfo.isPrimaryIconEnabled) MaterialTheme.colorScheme.primary else Color.LightGray
                 )
             }
         }

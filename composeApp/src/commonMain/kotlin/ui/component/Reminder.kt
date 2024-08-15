@@ -17,8 +17,6 @@ import com.kevinnzou.swipebox.SwipeDirection
 import com.kevinnzou.swipebox.widget.SwipeIcon
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
-import compose.icons.fontawesomeicons.solid.Bell
-import compose.icons.fontawesomeicons.solid.Ghost
 import compose.icons.fontawesomeicons.solid.Redo
 import compose.icons.fontawesomeicons.solid.Trash
 import core.models.reminder.Reminder
@@ -26,12 +24,12 @@ import core.models.reminder.ReminderInterval
 import core.models.reminder.getIcon
 import core.models.reminder.getState
 import kotlinx.coroutines.launch
-import ui.model.MainScreenModel
+import ui.model.RemindersTabModel
 import ui.screen.constants.Sizes
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Reminder(reminder: Reminder?, screenModel: MainScreenModel)
+fun Reminder(reminder: Reminder, screenModel: RemindersTabModel)
 {
     var reminderState by remember { mutableStateOf(reminder.getState()) }
     var messageField by remember { mutableStateOf(reminder?.message) }
@@ -61,7 +59,7 @@ fun Reminder(reminder: Reminder?, screenModel: MainScreenModel)
         Row(modifier = Modifier.fillMaxWidth().wrapContentHeight(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start) {
-            if (reminder != null && !reminder.isEditing)
+            if (!reminder.isEditing)
             {
                 Text(
                     modifier = Modifier.wrapContentHeight().align(Alignment.CenterVertically).weight(9f),
@@ -100,7 +98,7 @@ fun Reminder(reminder: Reminder?, screenModel: MainScreenModel)
                     onValueChange = { content: String ->
                         intervalField = if (content.isNotEmpty() && content.toIntOrNull() != null) content.toInt() else null
                     },
-                    enabled = reminder == null || reminder.isEditing,
+                    enabled = reminder.isEditing,
                     label = {
                         Text(
                             text = "Interval",
@@ -118,7 +116,7 @@ fun Reminder(reminder: Reminder?, screenModel: MainScreenModel)
                 IconToggleButton(
                     modifier = Modifier.weight(1f, fill = false).align(Alignment.CenterVertically),
                     checked = repeatField,
-                    enabled = reminder == null || reminder.isEditing,
+                    enabled = reminder.isEditing,
                     onCheckedChange = { repeatField = it },
                     colors = IconButtonDefaults.iconToggleButtonColors(
                         checkedContentColor = Color.Green,
@@ -142,7 +140,7 @@ fun Reminder(reminder: Reminder?, screenModel: MainScreenModel)
                             val interval = intervalField
                             if (interval != null)
                             {
-                                screenModel.createReminder(
+                                screenModel.addReminder(
                                     Reminder(
                                         message = messageField!!,
                                         isAcknowledged = false,
@@ -156,7 +154,7 @@ fun Reminder(reminder: Reminder?, screenModel: MainScreenModel)
                             }
                         }
                         Reminder.State.UNACKNOWLEDGED -> {
-                            reminder?.isAcknowledged = true
+                            reminder.isAcknowledged = true
                         }
                         Reminder.State.ACKNOWLEDGED -> {
                             // Do nothing since should be disabled in this case

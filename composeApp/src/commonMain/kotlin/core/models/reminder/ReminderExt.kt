@@ -3,7 +3,6 @@ package core.models.reminder
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.*
-import ui.model.MainScreenModel
 
 fun Reminder?.getState(): Reminder.State
 {

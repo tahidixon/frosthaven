@@ -4,9 +4,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.*
-import core.models.game.GameStates
 import core.models.rest.ErrorState
-import ui.model.MainScreenModel
+import ui.model.TurnTabModel
 
 class ActorInfo(
     val state: State = State.CREATE,
@@ -47,7 +46,9 @@ class ActorInfo(
 
     val isDeleteIconEnabled: Boolean = state == State.SUBMIT_INITIATIVE
 
-    fun handlePrimaryIconClick(screenModel: MainScreenModel, actor: Actor?) {
+    val isElementCreateEnabled: Boolean = state == State.SUBMIT_INITIATIVE
+
+    fun handlePrimaryIconClick(screenModel: TurnTabModel, actor: Actor?) {
         when (state) {
             State.CREATE -> {
                 if (actor == null && !name.isNullOrEmpty() && initiative.isValidInitiative()) {

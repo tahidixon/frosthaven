@@ -12,7 +12,7 @@ abstract class SyncTask : KoinComponent {
     val client by inject<RestClient>()
     val host = AppStateModel.hostAddress.value
     val pathPrefix = "/frosthaven" // ToDo
-    val port = 8080
+    val port = AppStateModel.hostPort.value
     val protocol = URLProtocol.HTTP
     open val body: String? = null
     abstract val path: String

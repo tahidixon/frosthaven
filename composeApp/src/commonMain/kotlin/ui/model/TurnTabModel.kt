@@ -4,7 +4,6 @@ import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import co.touchlab.kermit.Logger
-import co.touchlab.kermit.LoggerConfig
 import core.http.tasks.*
 import core.models.actor.Actor
 import core.models.actor.ActorInitiative
@@ -12,20 +11,17 @@ import core.models.actor.ActorName
 import core.models.game.GameStates
 import core.models.game.isTurnIndicator
 import core.models.reminder.Reminder
-import core.models.rest.ErrorSeverity
-import core.models.rest.ErrorState
-import core.models.turn.TurnDetails
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
-class MainScreenModel() : ScreenModel {
+class TurnTabModel : ScreenModel {
 
     companion object {
         const val SETTINGS_MODAL_ID = "Settings#MODAL_ID"
+        const val ELEMENT_CREATION_ID = "ElementCreation#MODAL_ID"
         const val LIST_ACTORS = "Actors#LIST_ID"
         const val LIST_REMINDERS = "Reminders#LIST_ID"
     }

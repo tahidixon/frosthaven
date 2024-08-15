@@ -12,15 +12,11 @@ import androidx.compose.ui.unit.dp
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Bars
-import compose.icons.fontawesomeicons.solid.Hamburger
-import core.state.AppStateModel
 import kotlinx.coroutines.launch
-import ui.component.TurnLabel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(title: @Composable () -> Unit) {
-    var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+fun AppBar(drawerState: DrawerState, title: @Composable () -> Unit) {
     val scope = rememberCoroutineScope()
     CenterAlignedTopAppBar(
         modifier = Modifier.fillMaxWidth().wrapContentHeight(),

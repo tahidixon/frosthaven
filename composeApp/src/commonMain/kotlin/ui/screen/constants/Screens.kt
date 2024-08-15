@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Bell
+import compose.icons.fontawesomeicons.solid.Cog
 import compose.icons.fontawesomeicons.solid.DiceD20
-import compose.icons.fontawesomeicons.solid.DiceOne
 
 enum class Screens(
     val title: String,
@@ -22,5 +22,10 @@ enum class Screens(
         title = "Reminders",
         route = "reminders",
         icon = FontAwesomeIcons.Solid.Bell
+    ),
+    SETTINGS(
+        title = "Settings",
+        route = "settings",
+        icon = FontAwesomeIcons.Solid.Cog
     )
 }
